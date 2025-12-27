@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Frequency-Aware Self-Optimising BST</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Frequency-Aware Self-Optimising BST</h1>
+    <p>Interactive comparison with a traditional Binary Search Tree</p>
+  </header>
+
+  <!-- STATUS BAR -->
+  <div class="status" id="statusBar">
+    Ready. Insert a key to begin.
+  </div>
+
+  <!-- CONTROLS -->
+  <section class="controls">
+    <input type="number" id="keyInput" placeholder="Enter key" />
+
+    <button class="btn primary" id="insertBtn">Insert</button>
+    <button class="btn warning" id="deleteBtn">Delete</button>
+    <button class="btn danger" id="finishBtn">Finish</button>
+  </section>
+
+  <!-- COMPARISON -->
+  <section class="comparison">
+
+    <!-- NORMAL BST -->
+    <div class="card" id="normalCard">
+      <h2>Normal BST</h2>
+
+      <div class="tree-area" id="normalTree">
+        🌳 Waiting for input
+      </div>
+
+      <div class="stats">
+        <span>Time</span>
+        <strong id="normalTime">0 ms</strong>
+      </div>
+    </div>
+
+    <!-- FREQUENCY BST -->
+    <div class="card accent" id="freqCard">
+      <h2>Frequency-Aware BST</h2>
+
+      <div class="tree-area" id="freqTree">
+        ⚡ Learning from access
+      </div>
+
+      <div class="stats">
+        <span>Time</span>
+        <strong id="freqTime">0 ms</strong>
+      </div>
+    </div>
+
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
