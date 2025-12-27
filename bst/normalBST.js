@@ -1,0 +1,126 @@
+// bst/normalBST.js
+
+class NormalBSTNode {
+  constructor(key) {
+    this.key = key;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+export class NormalBST {
+  constructor() {
+    this.root = null;
+    this.nodeVisits = 0;
+  }
+
+  /* ===============================
+     BASIC UTILITIES
+     =============================== */
+  resetVisits() {
+    this.nodeVisits = 0;
+  }
+
+  /* ===============================
+     INSERT
+     =============================== */
+  insert(key) {
+    this.root = this._insert(this.root, key);
+  }
+
+  _insert(node, key) {
+    if (!node) return new NormalBSTNode(key);
+
+    if (key < node.key) {
+      node.left = this._insert(node.left, key);
+    } else if (key > node.key) {
+      node.right = this._insert(node.right, key);
+    }
+
+    return node;
+  }
+
+  /* ===============================
+     SEARCH (BOOLEAN)
+     =============================== */
+  search(key) {
+    this.resetVisits();
+    return this._search(this.root, key);
+  }
+
+  _search(node, key) {
+    if (!node) return false;
+
+    this.nodeVisits++;
+
+    if (node.key === key) return true;
+    if (key < node.key) return this._search(node.left, key);
+    return this._search(node.right, key);
+  }
+
+  /* ===============================
+     SEARCH WITH PATH (FOR VISUALIZATION)
+     =============================== */
+  searchWithPath(key) {
+    this.resetVisits();
+    const path = [];
+    let node = this.root;
+
+    while (node) {
+      path.push(node.key);
+      this.nodeVisits++;
+
+      if (node.key === key) break;
+      node = key < node.key ? node.left : node.right;
+    }
+
+    return path;
+  }
+
+  /* ===============================
+     DELETE
+     =============================== */
+  delete(key) {
+    this.root = this._delete(this.root, key);
+  }
+
+  _delete(node, key) {
+    if (!node) return null;
+
+    if (key < node.key) {
+      node.left = this._delete(node.left, key);
+    } else if (key > node.key) {
+      node.right = this._delete(node.right, key);
+    } else {
+      if (!node.left) return node.right;
+      if (!node.right) return node.left;
+
+      const successor = this._minValueNode(node.right);
+      node.key = successor.key;
+      node.right = this._delete(node.right, successor.key);
+    }
+
+    return node;
+  }
+
+  _minValueNode(node) {
+    while (node.left) node = node.left;
+    return node;
+  }
+
+  /* ===============================
+     INORDER TRAVERSAL
+     =============================== */
+  inorder() {
+    const result = [];
+    this._inorder(this.root, result);
+    return result;
+  }
+
+  _inorder(node, result) {
+    if (!node) return;
+    this._inorder(node.left, result);
+    result.push(node.key);
+    this._inorder(node.right, result);
+  }
+}

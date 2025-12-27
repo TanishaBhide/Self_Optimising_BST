@@ -23,6 +23,7 @@
     <input type="number" id="keyInput" placeholder="Enter key" />
 
     <button class="btn primary" id="insertBtn">Insert</button>
+    <button class="btn primary" id="searchBtn">Search</button>
     <button class="btn warning" id="deleteBtn">Delete</button>
     <button class="btn danger" id="finishBtn">Finish</button>
   </section>
@@ -34,8 +35,15 @@
     <div class="card" id="normalCard">
       <h2>Normal BST</h2>
 
-      <div class="tree-area" id="normalTree">
-        🌳 Waiting for input
+      <div class="tree-area">
+        <!-- SVG DRAWING AREA -->
+        <svg
+          id="normalTreeSVG"
+          width="100%"
+          height="260"
+          viewBox="0 0 800 260"
+          preserveAspectRatio="xMidYMid meet">
+        </svg>
       </div>
 
       <div class="stats">
@@ -45,11 +53,18 @@
     </div>
 
     <!-- FREQUENCY BST -->
-    <div class="card accent" id="freqCard">
+    <div class="card" id="freqCard">
       <h2>Frequency-Aware BST</h2>
 
-      <div class="tree-area" id="freqTree">
-        ⚡ Learning from access
+      <div class="tree-area">
+        <!-- SVG DRAWING AREA -->
+        <svg
+          id="freqTreeSVG"
+          width="100%"
+          height="260"
+          viewBox="0 0 800 260"
+          preserveAspectRatio="xMidYMid meet">
+        </svg>
       </div>
 
       <div class="stats">
@@ -60,6 +75,8 @@
 
   </section>
 
-  <script src="app.js"></script>
+  <!-- APP LOGIC -->
+  <script type="module" src="app.js"></script>
+
 </body>
 </html>
