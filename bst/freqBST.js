@@ -16,6 +16,10 @@ export class FreqBST {
   constructor() {
     this.root = null;
     this.nodeVisits = 0;
+
+    // Optimization parameters
+    this.FREQ_THRESHOLD = 3;   // minimum difference to trigger swap
+    this.DECAY_FACTOR = 0.8;   // decay old frequencies
   }
 
   /* ===============================
@@ -50,7 +54,11 @@ export class FreqBST {
   search(key) {
     this.resetVisits();
     const found = this._search(this.root, key);
-    this._optimize(this.root);
+
+    if (found) {
+      this._optimize(this.root);
+    }
+
     return found;
   }
 
@@ -77,12 +85,16 @@ export class FreqBST {
     this.resetVisits();
     const path = [];
     let node = this.root;
+    let found = false;
 
     while (node) {
       path.push(node.key);
       this.nodeVisits++;
 
-      if (node.key === key) break;
+      if (node.key === key) {
+        found = true;
+        break;
+      }
 
       if (key < node.key) {
         node.leftFreq++;
@@ -93,23 +105,34 @@ export class FreqBST {
       }
     }
 
-    // Optimize after access
-    this._optimize(this.root);
+    if (found) {
+      this._optimize(this.root);
+    }
+
     return path;
   }
 
   /* ===============================
-     SELF-OPTIMIZATION
+     SELF-OPTIMIZATION (THRESHOLD + DECAY)
      =============================== */
   _optimize(node) {
     if (!node) return;
 
-    // Hot branch swap
-    if (node.rightFreq > node.leftFreq) {
-      [node.left, node.right] = [node.right, node.left];
-      [node.leftFreq, node.rightFreq] =
-        [node.rightFreq, node.leftFreq];
+    const diff = node.rightFreq - node.leftFreq;
+
+    // Swap only if frequency difference is significant
+    if (Math.abs(diff) >= this.FREQ_THRESHOLD) {
+      if (diff > 0) {
+        // Right branch is hotter → bring it to preferred side
+        [node.left, node.right] = [node.right, node.left];
+        [node.leftFreq, node.rightFreq] =
+          [node.rightFreq, node.leftFreq];
+      }
     }
+
+    // Frequency decay (prevents stale hot branches)
+    node.leftFreq = Math.floor(node.leftFreq * this.DECAY_FACTOR);
+    node.rightFreq = Math.floor(node.rightFreq * this.DECAY_FACTOR);
 
     this._optimize(node.left);
     this._optimize(node.right);
@@ -147,7 +170,7 @@ export class FreqBST {
   }
 
   /* ===============================
-     HOT NODE DETECTION
+     HOT NODE DETECTION (FOR UI)
      =============================== */
   getHotNodes(threshold = 3) {
     const hotNodes = new Set();

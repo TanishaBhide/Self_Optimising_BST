@@ -148,7 +148,7 @@ function drawTree(root, svg, path = [], hotNodes = new Set()) {
   clearSVG(svg);
   if (!root) return;
 
-  drawTreeRecursive(svg, root, 400, 30, 200, path, hotNodes);
+  drawTreeRecursive(svg, root, 400, 40, 220, path, hotNodes);
 }
 
 /* ===============================
@@ -205,18 +205,29 @@ searchBtn.onclick = () => {
     return;
   }
 
+  // NORMAL BST timing
+  let start = performance.now();
   const normalPath = normalBST.searchWithPath(key);
+  let end = performance.now();
+  const normalDuration = end - start;
+
+  // FREQ BST timing
+  start = performance.now();
   const freqPath = freqBST.searchWithPath(key);
+  end = performance.now();
+  const freqDuration = end - start;
+
   const hotNodes = freqBST.getHotNodes();
 
   drawTree(normalBST.root, normalSVG, normalPath);
   drawTree(freqBST.root, freqSVG, freqPath, hotNodes);
 
-  animateTime(normalTime, normalBST.nodeVisits);
-  animateTime(freqTime, freqBST.nodeVisits);
+  normalTime.textContent = `${normalDuration.toFixed(3)} ms`;
+  freqTime.textContent = `${freqDuration.toFixed(3)} ms`;
 
   setStatus(`Search completed for key ${key}`);
 };
+
 
 /* FINISH */
 finishBtn.onclick = () => {

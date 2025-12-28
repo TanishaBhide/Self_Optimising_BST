@@ -40,7 +40,7 @@ body {
 }
 
 /* ===============================
-   EXAM.AI AURORA BACKGROUND
+   AURORA BACKGROUND
    =============================== */
 body::before {
   content: "";
@@ -49,38 +49,22 @@ body::before {
   z-index: -1;
 
   background:
-    radial-gradient(
-      700px 350px at 20% 20%,
-      rgba(99, 102, 241, 0.45),
-      transparent 70%
-    ),
-    radial-gradient(
-      600px 400px at 80% 30%,
-      rgba(139, 92, 246, 0.45),
-      transparent 70%
-    ),
-    radial-gradient(
-      500px 350px at 50% 85%,
-      rgba(34, 211, 238, 0.30),
-      transparent 70%
-    );
-
+    radial-gradient(700px 350px at 20% 20%, rgba(99,102,241,0.45), transparent 70%),
+    radial-gradient(600px 400px at 80% 30%, rgba(139,92,246,0.45), transparent 70%),
+    radial-gradient(500px 350px at 50% 85%, rgba(34,211,238,0.30), transparent 70%);
   filter: blur(80px);
 }
 
-/* subtle stars / depth */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
-
   background-image:
     radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.35), transparent),
     radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.25), transparent),
     radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.30), transparent),
     radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,0.20), transparent);
-
   opacity: 0.15;
 }
 
@@ -89,16 +73,16 @@ body::after {
    =============================== */
 header {
   text-align: center;
-  padding: 32px 20px 16px;
+  padding: 36px 20px 18px;
 }
 
 header h1 {
-  font-size: 34px;
+  font-size: 36px;
   font-weight: 700;
 }
 
 header p {
-  margin-top: 6px;
+  margin-top: 8px;
   color: var(--text-muted);
   font-size: 15px;
 }
@@ -107,11 +91,11 @@ header p {
    STATUS BAR
    =============================== */
 .status {
-  max-width: 720px;
-  margin: 10px auto 0;
-  background: rgba(2, 6, 23, 0.8);
-  border-radius: 12px;
-  padding: 10px 16px;
+  max-width: 820px;
+  margin: 12px auto 0;
+  background: rgba(2, 6, 23, 0.85);
+  border-radius: 14px;
+  padding: 12px 18px;
   text-align: center;
   font-size: 14px;
   color: var(--text-muted);
@@ -124,14 +108,14 @@ header p {
 .controls {
   display: flex;
   justify-content: center;
-  gap: 12px;
-  padding: 26px 20px;
+  gap: 14px;
+  padding: 30px 20px;
 }
 
 .controls input {
-  width: 160px;
-  padding: 10px 14px;
-  border-radius: 10px;
+  width: 180px;
+  padding: 12px 16px;
+  border-radius: 12px;
   border: none;
   outline: none;
   font-size: 14px;
@@ -141,8 +125,8 @@ header p {
    BUTTONS
    =============================== */
 .btn {
-  padding: 10px 18px;
-  border-radius: 10px;
+  padding: 12px 22px;
+  border-radius: 12px;
   border: none;
   font-weight: 600;
   cursor: pointer;
@@ -152,7 +136,7 @@ header p {
 }
 
 .btn:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
   opacity: 0.95;
 }
 
@@ -161,93 +145,81 @@ header p {
 }
 
 .primary {
-  background: linear-gradient(
-    135deg,
-    var(--accent-primary),
-    var(--accent-gradient)
-  );
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-gradient));
   color: white;
 }
 
 .warning {
-  background: linear-gradient(
-    135deg,
-    var(--accent-secondary),
-    #67e8f9
-  );
+  background: linear-gradient(135deg, var(--accent-secondary), #67e8f9);
   color: #020617;
 }
 
 .danger {
-  background: linear-gradient(
-    135deg,
-    var(--danger),
-    #f87171
-  );
+  background: linear-gradient(135deg, var(--danger), #f87171);
   color: white;
 }
 
 /* ===============================
-   COMPARISON LAYOUT
+   COMPARISON LAYOUT (WIDER)
    =============================== */
 .comparison {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 28px;
-  padding: 30px;
-  max-width: 1200px;
+  gap: 40px;
+  padding: 40px;
+  max-width: 1500px; /* INCREASED WIDTH */
   margin: 0 auto;
 }
 
 /* ===============================
-   CARDS (GLASS EFFECT)
+   CARDS (BIGGER, RICHER)
    =============================== */
 .card {
-  background: rgba(17, 24, 39, 0.85);
-  backdrop-filter: blur(12px);
-  border-radius: 18px;
-  padding: 22px;
+  background: rgba(17, 24, 39, 0.88);
+  backdrop-filter: blur(14px);
+  border-radius: 22px;
+  padding: 30px;
 
   box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.65),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 25px 70px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
   transition: transform 0.25s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
 }
 
 .card h2 {
-  font-size: 20px;
-  margin-bottom: 12px;
+  font-size: 22px;
+  margin-bottom: 16px;
 }
 
 /* ===============================
    SEMANTIC BORDERS
    =============================== */
 #normalCard {
-  border: 1.5px solid var(--baseline);
+  border: 2px solid var(--baseline);
 }
 
 #freqCard {
-  border: 1.5px solid var(--success);
+  border: 2px solid var(--success);
 }
 
 /* ===============================
-   TREE AREA
+   TREE AREA (TALLER)
    =============================== */
 .tree-area {
-  height: 260px;
-  background: rgba(2, 6, 23, 0.9);
-  border-radius: 14px;
+  height: 460px; /* INCREASED HEIGHT */
+  background: rgba(2, 6, 23, 0.92);
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #64748b;
-  margin: 18px 0;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  margin: 24px 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* ===============================
