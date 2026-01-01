@@ -1,0 +1,138 @@
+/* ===============================
+   NODE DEFINITION
+   =============================== */
+class FreqBSTNode {
+  constructor(key) {
+    this.key = key;
+    this.freq = 1;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+/* ===============================
+   FREQUENCY OPTIMISED BST
+   =============================== */
+export class FreqBST {
+  constructor() {
+    this.root = null;
+  }
+
+  /* ===============================
+     INSERT (STANDARD BST)
+     =============================== */
+  insert(key) {
+    this.root = this._insert(this.root, key);
+  }
+
+  _insert(node, key) {
+    if (!node) return new FreqBSTNode(key);
+
+    if (key < node.key) {
+      node.left = this._insert(node.left, key);
+    } else if (key > node.key) {
+      node.right = this._insert(node.right, key);
+    } else {
+      node.freq++; // duplicate key
+    }
+
+    return node;
+  }
+
+  /* ===============================
+     SEARCH (FREQUENCY OPTIMISED)
+     =============================== */
+  search(key) {
+    this.root = this._search(this.root, key);
+  }
+
+  _search(node, key) {
+    if (!node) return null;
+
+    if (key === node.key) {
+      node.freq++;
+      return node;
+    }
+
+    if (key < node.key) {
+      node.left = this._search(node.left, key);
+
+      if (node.left && node.left.freq > node.freq) {
+        node = this._rotateRight(node);
+      }
+    } else {
+      node.right = this._search(node.right, key);
+
+      if (node.right && node.right.freq > node.freq) {
+        node = this._rotateLeft(node);
+      }
+    }
+
+    return node;
+  }
+
+  /* ===============================
+     ROTATIONS
+     =============================== */
+  _rotateRight(p) {
+    const x = p.left;
+    p.left = x.right;
+    x.right = p;
+    return x;
+  }
+
+  _rotateLeft(p) {
+    const x = p.right;
+    p.right = x.left;
+    x.left = p;
+    return x;
+  }
+
+  /* ===============================
+     INORDER TRAVERSAL
+     =============================== */
+  inorder() {
+    const result = [];
+    this._inorder(this.root, result);
+    return result;
+  }
+
+  _inorder(node, result) {
+    if (!node) return;
+    this._inorder(node.left, result);
+    result.push({ key: node.key, freq: node.freq });
+    this._inorder(node.right, result);
+  }
+
+  /* ===============================
+     DELETE (STANDARD BST)
+     =============================== */
+  delete(key) {
+    this.root = this._delete(this.root, key);
+  }
+
+  _delete(node, key) {
+    if (!node) return null;
+
+    if (key < node.key) {
+      node.left = this._delete(node.left, key);
+    } else if (key > node.key) {
+      node.right = this._delete(node.right, key);
+    } else {
+      if (!node.left) return node.right;
+      if (!node.right) return node.left;
+
+      const successor = this._minNode(node.right);
+      node.key = successor.key;
+      node.freq = successor.freq;
+      node.right = this._delete(node.right, successor.key);
+    }
+
+    return node;
+  }
+
+  _minNode(node) {
+    while (node.left) node = node.left;
+    return node;
+  }
+}
