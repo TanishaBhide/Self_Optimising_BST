@@ -1,8 +1,9 @@
 // bst/normalBST.js
+// Normal BST for CONTACT NAME searching (string-based)
 
 class NormalBSTNode {
-  constructor(key) {
-    this.key = key;
+  constructor(name) {
+    this.key = name;   // contact name (string)
     this.left = null;
     this.right = null;
   }
@@ -22,20 +23,24 @@ export class NormalBST {
   }
 
   /* ===============================
-     INSERT
+     INSERT (CONTACT NAME)
      =============================== */
-  insert(key) {
-    this.root = this._insert(this.root, key);
+  insert(name) {
+    if (!name || typeof name !== "string") return;
+    this.root = this._insert(this.root, name);
   }
 
-  _insert(node, key) {
-    if (!node) return new NormalBSTNode(key);
+  _insert(node, name) {
+    if (!node) return new NormalBSTNode(name);
 
-    if (key < node.key) {
-      node.left = this._insert(node.left, key);
-    } else if (key > node.key) {
-      node.right = this._insert(node.right, key);
+    const cmp = name.localeCompare(node.key);
+
+    if (cmp < 0) {
+      node.left = this._insert(node.left, name);
+    } else if (cmp > 0) {
+      node.right = this._insert(node.right, name);
     }
+    // duplicate names ignored
 
     return node;
   }
@@ -43,25 +48,27 @@ export class NormalBST {
   /* ===============================
      SEARCH (BOOLEAN)
      =============================== */
-  search(key) {
+  search(name) {
     this.resetVisits();
-    return this._search(this.root, key);
+    return this._search(this.root, name);
   }
 
-  _search(node, key) {
+  _search(node, name) {
     if (!node) return false;
 
     this.nodeVisits++;
 
-    if (node.key === key) return true;
-    if (key < node.key) return this._search(node.left, key);
-    return this._search(node.right, key);
+    const cmp = name.localeCompare(node.key);
+
+    if (cmp === 0) return true;
+    if (cmp < 0) return this._search(node.left, name);
+    return this._search(node.right, name);
   }
 
   /* ===============================
      SEARCH WITH PATH (FOR VISUALIZATION)
      =============================== */
-  searchWithPath(key) {
+  searchWithPath(name) {
     this.resetVisits();
     const path = [];
     let node = this.root;
@@ -70,27 +77,31 @@ export class NormalBST {
       path.push(node.key);
       this.nodeVisits++;
 
-      if (node.key === key) break;
-      node = key < node.key ? node.left : node.right;
+      const cmp = name.localeCompare(node.key);
+
+      if (cmp === 0) break;
+      node = cmp < 0 ? node.left : node.right;
     }
 
     return path;
   }
 
   /* ===============================
-     DELETE
+     DELETE (CONTACT NAME)
      =============================== */
-  delete(key) {
-    this.root = this._delete(this.root, key);
+  delete(name) {
+    this.root = this._delete(this.root, name);
   }
 
-  _delete(node, key) {
+  _delete(node, name) {
     if (!node) return null;
 
-    if (key < node.key) {
-      node.left = this._delete(node.left, key);
-    } else if (key > node.key) {
-      node.right = this._delete(node.right, key);
+    const cmp = name.localeCompare(node.key);
+
+    if (cmp < 0) {
+      node.left = this._delete(node.left, name);
+    } else if (cmp > 0) {
+      node.right = this._delete(node.right, name);
     } else {
       if (!node.left) return node.right;
       if (!node.right) return node.left;

@@ -10,17 +10,17 @@
   <!-- HEADER -->
   <header>
     <h1>Frequency-Aware Self-Optimising BST</h1>
-    <p>Interactive comparison with a traditional Binary Search Tree</p>
+    <p>Contact Search using Normal BST vs Frequency-Aware BST</p>
   </header>
 
   <!-- STATUS BAR -->
   <div class="status" id="statusBar">
-    Ready. Insert a key to begin.
+    Ready. Insert a contact name to begin.
   </div>
 
   <!-- CONTROLS -->
   <section class="controls">
-    <input type="number" id="keyInput" placeholder="Enter key" />
+    <input type="text" id="keyInput" placeholder="Enter contact name" />
 
     <button class="btn primary" id="insertBtn">Insert</button>
     <button class="btn primary" id="searchBtn">Search</button>
@@ -28,49 +28,46 @@
     <button class="btn danger" id="finishBtn">Finish</button>
   </section>
 
-  <!-- COMPARISON -->
+  <!-- COMPARISON : SIDE BY SIDE -->
   <section class="comparison">
 
     <!-- NORMAL BST -->
     <div class="card" id="normalCard">
       <h2>Normal BST</h2>
 
-      <div class="tree-area">
-        <!-- SVG DRAWING AREA -->
-        <svg
-          id="normalTreeSVG"
-          width="100%"
-          height="460"
-          viewBox="0 0 800 460"
-          preserveAspectRatio="xMidYMid meet">
-        </svg>
-      </div>
-
+      <!-- TIME ABOVE TREE -->
       <div class="stats">
         <span>Time</span>
         <strong id="normalTime">0 ms</strong>
       </div>
+
+      <div class="tree-area">
+        <svg
+          id="normalTreeSVG"
+          class="tree-svg"
+          viewBox="0 0 1200 900"
+          preserveAspectRatio="xMinYMin meet">
+        </svg>
+      </div>
     </div>
 
-    <!-- FREQUENCY BST -->
+    <!-- FREQUENCY-AWARE BST -->
     <div class="card" id="freqCard">
       <h2>Frequency-Aware BST</h2>
 
-      <div class="tree-area">
-        <!-- SVG DRAWING AREA -->
-        <svg
-          id="freqTreeSVG"
-          width="100%"
-          height="460"
-          viewBox="0 0 800 460"
-
-          preserveAspectRatio="xMidYMid meet">
-        </svg>
-      </div>
-
+      <!-- TIME ABOVE TREE -->
       <div class="stats">
         <span>Time</span>
         <strong id="freqTime">0 ms</strong>
+      </div>
+
+      <div class="tree-area">
+        <svg
+          id="freqTreeSVG"
+          class="tree-svg"
+          viewBox="0 0 1200 900"
+          preserveAspectRatio="xMinYMin meet">
+        </svg>
       </div>
     </div>
 

@@ -4,12 +4,8 @@ import { FreqBST } from "../bst/freqBST.js";
 /* ===============================
    BST INITIALIZATION
    =============================== */
-console.log("BST modules loaded successfully");
-
 const normalBST = new NormalBST();
 const freqBST = new FreqBST();
-
-console.log("BST instances created");
 
 /* ===============================
    DOM REFERENCES
@@ -30,33 +26,17 @@ const searchBtn = document.getElementById("searchBtn");
 const keyInput = document.getElementById("keyInput");
 
 /* ===============================
-   STATUS + TIME HELPERS
+   STATUS
    =============================== */
 function setStatus(text) {
   statusBar.textContent = text;
 }
 
-function animateTime(el, value) {
-  let start = 0;
-  const step = () => {
-    start += Math.max(1, value / 20);
-    if (start >= value) {
-      el.textContent = `${value} ms`;
-    } else {
-      el.textContent = `${Math.floor(start)} ms`;
-      requestAnimationFrame(step);
-    }
-  };
-  step();
-}
-
 /* ===============================
-   SVG DRAWING HELPERS
+   SVG HELPERS
    =============================== */
 function clearSVG(svg) {
-  while (svg.firstChild) {
-    svg.removeChild(svg.firstChild);
-  }
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
 }
 
 function drawLine(svg, x1, y1, x2, y2) {
@@ -70,74 +50,91 @@ function drawLine(svg, x1, y1, x2, y2) {
   svg.appendChild(line);
 }
 
+/* ===============================
+   RECTANGLE NODE (KEY CHANGE)
+   =============================== */
 function drawNode(svg, x, y, value, highlight = false, hot = false) {
-  const r = 18;
+  const paddingX = 10;
+  const paddingY = 6;
+  const fontSize = 13;
 
-  const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  circle.setAttribute("cx", x);
-  circle.setAttribute("cy", y);
-  circle.setAttribute("r", r);
+  const tempText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  tempText.setAttribute("font-size", fontSize);
+  tempText.textContent = value;
+  svg.appendChild(tempText);
 
-  if (highlight) {
-    circle.setAttribute("fill", "#2563eb"); // search path
-  } else if (hot) {
-    circle.setAttribute("fill", "#22c55e"); // hot node
-  } else {
-    circle.setAttribute("fill", "#020617"); // normal
-  }
+  const textWidth = tempText.getBBox().width;
+  svg.removeChild(tempText);
 
-  circle.setAttribute("stroke", "#e5e7eb");
-  circle.setAttribute("stroke-width", "2");
+  const rectWidth = textWidth + paddingX * 2;
+  const rectHeight = fontSize + paddingY * 2;
+
+  const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  rect.setAttribute("x", x - rectWidth / 2);
+  rect.setAttribute("y", y - rectHeight / 2);
+  rect.setAttribute("width", rectWidth);
+  rect.setAttribute("height", rectHeight);
+  rect.setAttribute("rx", 6);
+  rect.setAttribute("ry", 6);
+
+  if (highlight) rect.setAttribute("fill", "#2563eb");
+  else if (hot) rect.setAttribute("fill", "#22c55e");
+  else rect.setAttribute("fill", "#020617");
+
+  rect.setAttribute("stroke", "#e5e7eb");
+  rect.setAttribute("stroke-width", "2");
 
   const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
   text.setAttribute("x", x);
-  text.setAttribute("y", y + 5);
+  text.setAttribute("y", y + fontSize / 3);
   text.setAttribute("text-anchor", "middle");
   text.setAttribute("fill", "#e5e7eb");
-  text.setAttribute("font-size", "12");
+  text.setAttribute("font-size", fontSize);
+  text.setAttribute("font-weight", "600");
   text.textContent = value;
 
-  svg.appendChild(circle);
+  svg.appendChild(rect);
   svg.appendChild(text);
 }
 
-function drawTreeRecursive(
-  svg,
-  node,
-  x,
-  y,
-  spread,
-  path = [],
-  hotNodes = new Set()
-) {
+/* ===============================
+   TREE DRAWING
+   =============================== */
+function drawTreeRecursive(svg, node, x, y, spread, path, hotNodes) {
   if (!node) return;
 
-  const isHighlighted = path.includes(node.key);
-  const isHot = hotNodes.has(node.key);
+  drawNode(
+    svg,
+    x,
+    y,
+    node.key,
+    path.includes(node.key),
+    hotNodes.has(node.key)
+  );
 
-  drawNode(svg, x, y, node.key, isHighlighted, isHot);
+  const nextY = y + 70;
 
   if (node.left) {
-    drawLine(svg, x, y + 18, x - spread, y + 60);
+    drawLine(svg, x, y + 18, x - spread, nextY - 18);
     drawTreeRecursive(
       svg,
       node.left,
       x - spread,
-      y + 60,
-      spread / 2,
+      nextY,
+      spread * 0.7,
       path,
       hotNodes
     );
   }
 
   if (node.right) {
-    drawLine(svg, x, y + 18, x + spread, y + 60);
+    drawLine(svg, x, y + 18, x + spread, nextY - 18);
     drawTreeRecursive(
       svg,
       node.right,
       x + spread,
-      y + 60,
-      spread / 2,
+      nextY,
+      spread * 0.7,
       path,
       hotNodes
     );
@@ -148,99 +145,82 @@ function drawTree(root, svg, path = [], hotNodes = new Set()) {
   clearSVG(svg);
   if (!root) return;
 
-  drawTreeRecursive(svg, root, 400, 40, 220, path, hotNodes);
+  // Compact, readable start position
+  drawTreeRecursive(svg, root, 450, 50, 180, path, hotNodes);
 }
 
 /* ===============================
-   BUTTON INTERACTIONS
+   BUTTON ACTIONS
    =============================== */
 
 /* INSERT */
 insertBtn.onclick = () => {
-  const key = parseInt(keyInput.value);
-  if (isNaN(key)) {
-    setStatus("Please enter a valid number.");
+  const name = keyInput.value.trim();
+  if (!name) {
+    setStatus("Please enter a contact name.");
     return;
   }
 
-  normalBST.insert(key);
-  freqBST.insert(key);
+  normalBST.insert(name);
+  freqBST.insert(name);
 
   drawTree(normalBST.root, normalSVG);
   drawTree(freqBST.root, freqSVG);
 
-  animateTime(normalTime, 6);
-  animateTime(freqTime, 3);
-
-  setStatus(`Inserted key ${key} into both trees`);
+  setStatus(`Inserted contact "${name}"`);
   keyInput.value = "";
 };
 
 /* DELETE */
 deleteBtn.onclick = () => {
-  const key = parseInt(keyInput.value);
-  if (isNaN(key)) {
-    setStatus("Please enter a valid number to delete.");
+  const name = keyInput.value.trim();
+  if (!name) {
+    setStatus("Please enter a contact name to delete.");
     return;
   }
 
-  normalBST.delete(key);
-  freqBST.delete(key);
+  normalBST.delete(name);
+  freqBST.delete(name);
 
   drawTree(normalBST.root, normalSVG);
   drawTree(freqBST.root, freqSVG);
 
-  animateTime(normalTime, 5);
-  animateTime(freqTime, 4);
-
-  setStatus(`Deleted key ${key} from both trees`);
+  setStatus(`Deleted contact "${name}"`);
   keyInput.value = "";
 };
 
 /* SEARCH */
 searchBtn.onclick = () => {
-  const key = parseInt(keyInput.value);
-  if (isNaN(key)) {
-    setStatus("Please enter a valid number to search.");
+  const name = keyInput.value.trim();
+  if (!name) {
+    setStatus("Please enter a contact name to search.");
     return;
   }
 
-  // NORMAL BST timing
   let start = performance.now();
-  const normalPath = normalBST.searchWithPath(key);
+  const normalPath = normalBST.searchWithPath(name);
   let end = performance.now();
-  const normalDuration = end - start;
+  normalTime.textContent = `${(end - start).toFixed(3)} ms`;
 
-  // FREQ BST timing
   start = performance.now();
-  const freqPath = freqBST.searchWithPath(key);
+  const freqPath = freqBST.searchWithPath(name);
   end = performance.now();
-  const freqDuration = end - start;
-
-  const hotNodes = freqBST.getHotNodes();
+  freqTime.textContent = `${(end - start).toFixed(3)} ms`;
 
   drawTree(normalBST.root, normalSVG, normalPath);
-  drawTree(freqBST.root, freqSVG, freqPath, hotNodes);
+  drawTree(freqBST.root, freqSVG, freqPath, freqBST.getHotNodes());
 
-  normalTime.textContent = `${normalDuration.toFixed(3)} ms`;
-  freqTime.textContent = `${freqDuration.toFixed(3)} ms`;
-
-  setStatus(`Search completed for key ${key}`);
+  setStatus(`Search completed for "${name}"`);
 };
-
 
 /* FINISH */
 finishBtn.onclick = () => {
   drawTree(normalBST.root, normalSVG);
   drawTree(freqBST.root, freqSVG, [], freqBST.getHotNodes());
 
-  setStatus("Simulation finished. Final trees displayed.");
-
   insertBtn.disabled = true;
   deleteBtn.disabled = true;
   searchBtn.disabled = true;
 
-  insertBtn.style.opacity = "0.4";
-  deleteBtn.style.opacity = "0.4";
-  searchBtn.style.opacity = "0.4";
+  setStatus("Simulation finished. Final trees displayed.");
 };

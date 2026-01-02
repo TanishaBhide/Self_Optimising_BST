@@ -1,8 +1,9 @@
 // bst/freqBST.js
+// Frequency-Aware Self-Optimizing BST for CONTACT NAMES
 
 class FreqBSTNode {
-  constructor(key) {
-    this.key = key;
+  constructor(name) {
+    this.key = name;     // contact name (string)
     this.left = null;
     this.right = null;
 
@@ -30,20 +31,24 @@ export class FreqBST {
   }
 
   /* ===============================
-     INSERT
+     INSERT (CONTACT NAME)
      =============================== */
-  insert(key) {
-    this.root = this._insert(this.root, key);
+  insert(name) {
+    if (!name || typeof name !== "string") return;
+    this.root = this._insert(this.root, name);
   }
 
-  _insert(node, key) {
-    if (!node) return new FreqBSTNode(key);
+  _insert(node, name) {
+    if (!node) return new FreqBSTNode(name);
 
-    if (key < node.key) {
-      node.left = this._insert(node.left, key);
-    } else if (key > node.key) {
-      node.right = this._insert(node.right, key);
+    const cmp = name.localeCompare(node.key);
+
+    if (cmp < 0) {
+      node.left = this._insert(node.left, name);
+    } else if (cmp > 0) {
+      node.right = this._insert(node.right, name);
     }
+    // duplicate names ignored
 
     return node;
   }
@@ -51,9 +56,9 @@ export class FreqBST {
   /* ===============================
      SEARCH (BOOLEAN)
      =============================== */
-  search(key) {
+  search(name) {
     this.resetVisits();
-    const found = this._search(this.root, key);
+    const found = this._search(this.root, name);
 
     if (found) {
       this._optimize(this.root);
@@ -62,26 +67,28 @@ export class FreqBST {
     return found;
   }
 
-  _search(node, key) {
+  _search(node, name) {
     if (!node) return false;
 
     this.nodeVisits++;
 
-    if (node.key === key) return true;
+    const cmp = name.localeCompare(node.key);
 
-    if (key < node.key) {
+    if (cmp === 0) return true;
+
+    if (cmp < 0) {
       node.leftFreq++;
-      return this._search(node.left, key);
+      return this._search(node.left, name);
     } else {
       node.rightFreq++;
-      return this._search(node.right, key);
+      return this._search(node.right, name);
     }
   }
 
   /* ===============================
-     SEARCH WITH PATH (FOR VISUALIZATION)
+     SEARCH WITH PATH (FOR UI)
      =============================== */
-  searchWithPath(key) {
+  searchWithPath(name) {
     this.resetVisits();
     const path = [];
     let node = this.root;
@@ -91,12 +98,14 @@ export class FreqBST {
       path.push(node.key);
       this.nodeVisits++;
 
-      if (node.key === key) {
+      const cmp = name.localeCompare(node.key);
+
+      if (cmp === 0) {
         found = true;
         break;
       }
 
-      if (key < node.key) {
+      if (cmp < 0) {
         node.leftFreq++;
         node = node.left;
       } else {
@@ -113,24 +122,21 @@ export class FreqBST {
   }
 
   /* ===============================
-     SELF-OPTIMIZATION (THRESHOLD + DECAY)
+     SELF-OPTIMIZATION
      =============================== */
   _optimize(node) {
     if (!node) return;
 
     const diff = node.rightFreq - node.leftFreq;
 
-    // Swap only if frequency difference is significant
-    if (Math.abs(diff) >= this.FREQ_THRESHOLD) {
-      if (diff > 0) {
-        // Right branch is hotter → bring it to preferred side
-        [node.left, node.right] = [node.right, node.left];
-        [node.leftFreq, node.rightFreq] =
-          [node.rightFreq, node.leftFreq];
-      }
+    // Swap only if difference is significant
+    if (Math.abs(diff) >= this.FREQ_THRESHOLD && diff > 0) {
+      [node.left, node.right] = [node.right, node.left];
+      [node.leftFreq, node.rightFreq] =
+        [node.rightFreq, node.leftFreq];
     }
 
-    // Frequency decay (prevents stale hot branches)
+    // Decay frequencies
     node.leftFreq = Math.floor(node.leftFreq * this.DECAY_FACTOR);
     node.rightFreq = Math.floor(node.rightFreq * this.DECAY_FACTOR);
 
@@ -139,19 +145,21 @@ export class FreqBST {
   }
 
   /* ===============================
-     DELETE
+     DELETE (CONTACT NAME)
      =============================== */
-  delete(key) {
-    this.root = this._delete(this.root, key);
+  delete(name) {
+    this.root = this._delete(this.root, name);
   }
 
-  _delete(node, key) {
+  _delete(node, name) {
     if (!node) return null;
 
-    if (key < node.key) {
-      node.left = this._delete(node.left, key);
-    } else if (key > node.key) {
-      node.right = this._delete(node.right, key);
+    const cmp = name.localeCompare(node.key);
+
+    if (cmp < 0) {
+      node.left = this._delete(node.left, name);
+    } else if (cmp > 0) {
+      node.right = this._delete(node.right, name);
     } else {
       if (!node.left) return node.right;
       if (!node.right) return node.left;
@@ -170,7 +178,7 @@ export class FreqBST {
   }
 
   /* ===============================
-     HOT NODE DETECTION (FOR UI)
+     HOT NODE DETECTION
      =============================== */
   getHotNodes(threshold = 3) {
     const hotNodes = new Set();
