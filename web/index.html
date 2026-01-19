@@ -2,79 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Frequency-Aware Self-Optimising BST</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BST Optimization Visualizer</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- HEADER -->
   <header>
-    <h1>Frequency-Aware Self-Optimising BST</h1>
-    <p>Contact Search using Normal BST vs Frequency-Aware BST</p>
+    <h1>Frequency-Aware Self-Optimizing Tree</h1>
+    <p>Compare standard BST search paths against a dynamic frequency-optimized tree.</p>
   </header>
 
-  <!-- STATUS BAR -->
   <div class="status" id="statusBar">
-    Ready. Insert a contact name to begin.
+    Ready. Insert names to build the trees.
   </div>
 
-  <!-- CONTROLS -->
   <section class="controls">
-    <input type="text" id="keyInput" placeholder="Enter contact name" />
-
+    <input type="text" id="keyInput" placeholder="Enter Name (e.g. Alice)" autocomplete="off" />
     <button class="btn primary" id="insertBtn">Insert</button>
     <button class="btn primary" id="searchBtn">Search</button>
     <button class="btn warning" id="deleteBtn">Delete</button>
     <button class="btn danger" id="finishBtn">Finish</button>
   </section>
 
-  <!-- COMPARISON : SIDE BY SIDE -->
   <section class="comparison">
-
-    <!-- NORMAL BST -->
     <div class="card" id="normalCard">
       <h2>Normal BST</h2>
-
-      <!-- TIME ABOVE TREE -->
       <div class="stats">
-        <span>Time</span>
-        <strong id="normalTime">0 ms</strong>
+        <span>Avg Search Time:</span>
+        <strong id="normalTime">0.000000 ms</strong>
       </div>
-
       <div class="tree-area">
-        <svg
-          id="normalTreeSVG"
-          class="tree-svg"
-          viewBox="0 0 1200 900"
-          preserveAspectRatio="xMinYMin meet">
-        </svg>
+        <svg id="normalTreeSVG" class="tree-svg"></svg>
       </div>
     </div>
 
-    <!-- FREQUENCY-AWARE BST -->
     <div class="card" id="freqCard">
       <h2>Frequency-Aware BST</h2>
-
-      <!-- TIME ABOVE TREE -->
       <div class="stats">
-        <span>Time</span>
-        <strong id="freqTime">0 ms</strong>
+        <span>Avg Search Time:</span>
+        <strong id="freqTime">0.000000 ms</strong>
       </div>
-
       <div class="tree-area">
-        <svg
-          id="freqTreeSVG"
-          class="tree-svg"
-          viewBox="0 0 1200 900"
-          preserveAspectRatio="xMinYMin meet">
-        </svg>
+        <svg id="freqTreeSVG" class="tree-svg"></svg>
       </div>
     </div>
-
   </section>
 
-  <!-- APP LOGIC -->
   <script type="module" src="app.js"></script>
-
 </body>
 </html>

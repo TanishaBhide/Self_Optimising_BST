@@ -46,7 +46,7 @@ export class NormalBST {
   }
 
   /* ===============================
-     SEARCH (BOOLEAN)
+     SEARCH
      =============================== */
   search(name) {
     this.resetVisits();
@@ -65,6 +65,20 @@ export class NormalBST {
     return this._search(node.right, name);
   }
 
+   /* ===============================
+     SEARCH DRY RUN (For Timing)
+     =============================== */
+    searchDryRun(name) {
+        let node = this.root;
+        while(node) {
+            const cmp = name.localeCompare(node.key);
+            if (cmp === 0) return true;
+            if (cmp < 0) node = node.left;
+            else node = node.right;
+        }
+        return false;
+    }
+
   /* ===============================
      SEARCH WITH PATH (FOR VISUALIZATION)
      =============================== */
@@ -72,6 +86,7 @@ export class NormalBST {
     this.resetVisits();
     const path = [];
     let node = this.root;
+    let found = false;
 
     while (node) {
       path.push(node.key);
@@ -79,15 +94,18 @@ export class NormalBST {
 
       const cmp = name.localeCompare(node.key);
 
-      if (cmp === 0) break;
+      if (cmp === 0) {
+          found = true;
+          break;
+      }
       node = cmp < 0 ? node.left : node.right;
     }
 
-    return path;
+    return { path, found };
   }
 
   /* ===============================
-     DELETE (CONTACT NAME)
+     DELETE
      =============================== */
   delete(name) {
     this.root = this._delete(this.root, name);
@@ -117,21 +135,5 @@ export class NormalBST {
   _minValueNode(node) {
     while (node.left) node = node.left;
     return node;
-  }
-
-  /* ===============================
-     INORDER TRAVERSAL
-     =============================== */
-  inorder() {
-    const result = [];
-    this._inorder(this.root, result);
-    return result;
-  }
-
-  _inorder(node, result) {
-    if (!node) return;
-    this._inorder(node.left, result);
-    result.push(node.key);
-    this._inorder(node.right, result);
   }
 }
