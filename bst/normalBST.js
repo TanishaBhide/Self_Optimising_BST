@@ -16,7 +16,7 @@ export class NormalBST {
   }
 
   /* ===============================
-     BASIC UTILITIES
+     Resetting
      =============================== */
   resetVisits() {
     this.nodeVisits = 0;

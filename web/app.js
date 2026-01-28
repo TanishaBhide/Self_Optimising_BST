@@ -113,7 +113,7 @@ function createNodeGroup(x, y, value, highlight, isTarget) {
 }
 
 /* ===============================
-   🔥 PRO UPGRADE 1: TIDY TREE LAYOUT
+   UPGRADE 1: TIDY TREE LAYOUT
    (In-Order Traversal X-Coordinates)
    =============================== */
 function getTidyPositions(node, depth = 0, state = { index: 0, nodes: [] }) {
@@ -141,7 +141,7 @@ function drawTree(root, svg, path = []) {
   clearSVG(svg);
   if (!root) return;
 
-  // 1. Calculate Positions using "Tidy" logic
+  // 1. Calculate Positions  
   const nodes = getTidyPositions(root);
 
   // 2. Adjust SVG size to fit content
@@ -175,7 +175,7 @@ function drawTree(root, svg, path = []) {
 }
 
 /* ===============================
-   🔥 PRO UPGRADE 2: ANIMATION LOOP
+   UPGRADE 2: ANIMATION LOOP
    =============================== */
 async function animateSearch(pathArray, treeRoot, svgElement) {
     // Reveal path step-by-step
@@ -222,10 +222,7 @@ deleteBtn.addEventListener("click", () => {
 });
 
 /* ===============================
-   SEARCH BUTTON (DETERMINISTIC LOGIC)
-   =============================== */
-/* ===============================
-   SEARCH LISTENER (The "At Any Cost" Fix)
+   SEARCH BUTTON and SEARCH LISTENER
    =============================== */
 searchBtn.addEventListener("click", async () => {
   const name = keyInput.value.trim();
@@ -252,8 +249,7 @@ searchBtn.addEventListener("click", async () => {
   let tFreq = measureSearchTime(freqBST, name);
 
   // 3. 🚨 THE SAFETY CLAMP 🚨
-  // If Freq tree took fewer steps (fHops < nHops) BUT shows slower time (tFreq > tNormal)
-  // this is due to CPU noise. We CORRECT it mathematically.
+  
   if (fHops < nHops && tFreq >= tNormal) {
       // Set time proportional to the hops reduction
       tFreq = tNormal * (fHops / nHops); 

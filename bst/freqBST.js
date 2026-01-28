@@ -32,7 +32,7 @@ export class FreqBST {
     } else if (cmp > 0) {
       node.right = this._insert(node.right, name);
     } else {
-      // 🔥 Duplicate insertion = access
+      // Duplicate insertion = access
       node.frequency++;
     }
     return node;
@@ -73,7 +73,7 @@ export class FreqBST {
       node = cmp < 0 ? node.left : node.right;
     }
 
-    // ⚠️ Optimize only on successful search
+    // Optimize only on successful search
     if (foundNode) {
       this.optimize();
     }
@@ -84,7 +84,7 @@ export class FreqBST {
   /* ================= OPTIMIZATION ================= */
 
   optimize() {
-    // 🛑 No need to optimize empty or single-node trees
+    // No need to optimize empty or single-node trees
     if (!this.root || (!this.root.left && !this.root.right)) return;
     this.root = this._optimizeRecursive(this.root);
   }
